@@ -3,16 +3,16 @@ import { HttpClient } from '@angular/common/http';
 import { map, catchError, switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 
+export const BASE_URL = 'https://planning-poker-api-teja.herokuapp.com';
 @Injectable({
   providedIn: 'root',
 })
 export class RegistrationService {
   constructor(private httpClient: HttpClient) {}
 
-  baseURL = 'http://localhost:3000';
-
   createRoom(userName, userId) {
-    return this.httpClient.post(`${this.baseURL}/rooms/createRoom`, {
+    this.httpClient.get(BASE_URL).subscribe(console.log);
+    return this.httpClient.post(`${BASE_URL}/rooms/createRoom`, {
       userDetails: {
         userName,
         userId,
@@ -22,7 +22,7 @@ export class RegistrationService {
 
   joinRoom(userName, userId, roomId) {
     return this.httpClient
-      .post(`${this.baseURL}/rooms/joinRoom`, {
+      .post(`${BASE_URL}/rooms/joinRoom`, {
         userDetails: {
           userName,
           userId,
