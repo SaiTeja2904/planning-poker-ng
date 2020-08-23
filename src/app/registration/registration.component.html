@@ -1,0 +1,22 @@
+<div class="registration-card">
+  <form class="form" [formGroup]="formGroup">
+    <div class="input">
+      <label>Name:</label>
+      <input type="text" formControlName="name" />
+    </div>
+    <div class="input">
+      <label>Email Id:</label>
+      <input type="email" formControlName="emailId" />
+    </div>
+    <div class="input">
+      <label>Room Id:</label>
+      <input type="text" formControlName="roomId" />
+    </div>
+    <button (click)="createRoom()" [disabled]="!formGroup.valid">
+      Create Room
+    </button>
+    <button (click)="joinRoom()" [disabled]="!formGroup.valid">
+      Join Room
+    </button>
+  </form>
+</div>
