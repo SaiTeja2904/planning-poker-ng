@@ -1,7 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RegistrationService } from './registration.service';
-import { pipe } from 'rxjs';
+
+import { Store } from '@ngrx/store';
+import { State } from '../reducers';
+import { SetUserDetails } from '../actions/user.actions';
+import { Router } from '@angular/router';
+import { SetRoomId } from '../actions/room.actions';
 
 @Component({
   selector: 'app-registration',
@@ -12,7 +17,9 @@ export class RegistrationComponent implements OnInit {
   formGroup: FormGroup;
   constructor(
     public fb: FormBuilder,
-    public registrationService: RegistrationService
+    public registrationService: RegistrationService,
+    public store: Store<State>,
+    public router: Router
   ) {}
 
   ngOnInit(): void {
@@ -21,17 +28,19 @@ export class RegistrationComponent implements OnInit {
       emailId: ['', Validators.required],
       roomId: [''],
     });
-
-    this.formGroup.valueChanges.subscribe((data) => {
-      console.log(data);
-    });
   }
 
   createRoom() {
     const { name, emailId } = this.formGroup.value;
-    this.registrationService.createRoom(name, emailId).subscribe((roomId) => {
-      console.log(roomId);
-    });
+    this.registrationService
+      .createRoom(name, emailId)
+      .subscribe((response: any) => {
+        const { userDetails, roomId, isOwner } = response;
+        const { userName, userId } = userDetails;
+        this.store.dispatch(new SetUserDetails(userName, userId, isOwner));
+        this.store.dispatch(new SetRoomId(roomId));
+        this.router.navigate(['/poker']);
+      });
   }
 
   joinRoom() {
@@ -39,8 +48,12 @@ export class RegistrationComponent implements OnInit {
     if (roomId) {
       this.registrationService
         .joinRoom(name, emailId, roomId)
-        .subscribe((roomId) => {
-          console.log(roomId);
+        .subscribe((response: any) => {
+          const { userDetails, roomId, isOwner } = response;
+          const { userName, userId } = userDetails;
+          this.store.dispatch(new SetUserDetails(userName, userId, isOwner));
+          this.store.dispatch(new SetRoomId(roomId));
+          this.router.navigate(['/poker']);
         });
     } else {
       alert('Please enter Room ID if you want to join a room');

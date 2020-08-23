@@ -1,0 +1,42 @@
+<div>
+  <div class="room-info">
+    <h3>Hi {{ userName }} !!</h3>
+    <div>
+      Story: {{ story?.storyId
+      }}<button
+        style="margin-left: 5px;"
+        *ngIf="isOwner"
+        (click)="onStoryIdEdit()"
+      >
+        Edit
+      </button>
+    </div>
+    <div>
+      <button *ngIf="isOwner" (click)="flipCards()">Flip Cards</button>
+      <button *ngIf="isOwner" style="margin-left: 5px;" (click)="resetCards()">
+        Reset
+      </button>
+      <h3>Room Id: {{ roomId }}</h3>
+    </div>
+  </div>
+
+  <div style="display: flex; flex-wrap: wrap;">
+    <app-each-user-card
+      style="margin: 10px;"
+      *ngFor="let user of currentRoomUsers"
+      [user]="user"
+    ></app-each-user-card>
+  </div>
+
+  <div style="margin-top: 100px;">
+    Select your story points:
+    <div style="display: flex; flex-wrap: wrap; justify-content: center;">
+      <app-vote-card
+        style="margin: 10px;"
+        *ngFor="let vote of availbleVotes"
+        [vote]="vote"
+        (selectedVote)="onVoteSelected($event)"
+      ></app-vote-card>
+    </div>
+  </div>
+</div>

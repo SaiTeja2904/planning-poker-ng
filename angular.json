@@ -123,6 +123,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "planning-poker-ng"
+    }
+  },
+  "defaultProject": "planning-poker-ng",
+  "cli": {
+    "defaultCollection": "@ngrx/schematics"
+  }
 }
